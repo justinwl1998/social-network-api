@@ -57,6 +57,7 @@ module.exports = {
                     : res.json(user)
             )
             .catch((err) => res.status(500).json(err));
+            // eventually add thoughts deleting
     },
     addFriend(req, res) {
         User.findOneAndUpdate(
