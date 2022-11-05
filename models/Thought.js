@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+function dateFormat(createdAt) {
+    console.log("formatting date")
+    return createdAt.toDateString();
+}
+
 const reactionSchema = new mongoose.Schema(
     {
         reactionId: {
@@ -17,8 +22,18 @@ const reactionSchema = new mongoose.Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now
+            default: Date.now,
+            get: dateFormat
         }
+    },
+    {
+        toJSON: {
+            getters: true
+        },
+        toObject: {
+            getters: true
+        },
+        _id: false,
     }
 )
 
@@ -33,6 +48,7 @@ const thoughtSchema = new mongoose.Schema(
         createdAt: {
             type: Date,
             default: Date.now,
+            get: dateFormat
         },
         username: {
             type: String,
@@ -42,7 +58,11 @@ const thoughtSchema = new mongoose.Schema(
     },
     {
         toJSON: {
+            getters: true,
             virtuals: true,
+        },
+        toObject: {
+            getters: true
         },
         id: false,
     }
