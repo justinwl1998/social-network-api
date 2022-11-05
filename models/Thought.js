@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 function dateFormat(createdAt) {
-    console.log("formatting date")
     return createdAt.toDateString();
 }
 
