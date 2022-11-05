@@ -37,11 +37,24 @@ module.exports = {
                     { $push: { thoughts: ObjectId(thought._id)}},
                     { runValidators: true, new: true }
                 )
-                .then((user) => res.json(user))
+                res.json(thought)
             })
             .catch((err) => {
                 console.log(err);
                 return res.status(500).json(err);
             })
+    },
+    updateThought(req, res) {
+        Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId},
+            {$set: { thoughtText: req.body.thoughtText }},
+            {runValidators: true, new: true}
+        )
+        .then((thought) => 
+            !thought
+                ? res.status(404).json({ message: 'No message with that ID'})
+                : res.json(thought)
+        )
+        .catch((err) => res.status(500).json(err));
     }
 }
