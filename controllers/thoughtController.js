@@ -68,5 +68,19 @@ module.exports = {
             )
             .then(() => res.json({ message: "Thought deleted "}))
             .catch((err) => res.status(500).json(err));
+    },
+    addReaction(req, res) {
+        Thought.findOne({ _id: req.params.thoughtId })
+            .then((thought) => {
+                !thought
+                    ? res.status(404).json({ message: "No message with that ID"})
+                    : thought.reactions.push({
+                        reactionBody: req.body.reactionText,
+                        username: req.body.username
+                    });
+                thought.save();
+                res.json(thought);
+            })
+            .catch((err) => res.status(500).json(err));
     }
 }
