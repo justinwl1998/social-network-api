@@ -56,5 +56,17 @@ module.exports = {
                 : res.json(thought)
         )
         .catch((err) => res.status(500).json(err));
+    },
+    deleteThought(req, res) {
+        Thought.findOneAndRemove({ _id: req.params.thoughtId })
+            .then((thought) => 
+                User.findOneAndUpdate(
+                    { _id: req.body.userId },
+                    { $pull: { thoughts: ObjectId(thought._id )}},
+                    { runValidators: true, new: true }
+                )
+            )
+            .then(() => res.json({ message: "Thought deleted "}))
+            .catch((err) => res.status(500).json(err));
     }
 }
