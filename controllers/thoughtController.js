@@ -31,7 +31,6 @@ module.exports = {
     createThought(req, res) {
         Thought.create(req.body)
             .then((thought) => {
-                console.log(req.body.userId)
                 return User.findOneAndUpdate(
                     { _id: req.body.userId },
                     { $addToSet: { thoughts: thought._id }},
@@ -70,7 +69,11 @@ module.exports = {
                     { runValidators: true, new: true }
                 )}
             )
-            .then(() => res.json({ message: "Thought deleted "}))
+            .then((user) => 
+                !user
+                    ? res.status(404).json({message: "Thought deleted, but user not found"})
+                    : res.json("Thought successfully deleted")
+            )
             .catch((err) => res.status(500).json(err));
     },
     addReaction(req, res) {
