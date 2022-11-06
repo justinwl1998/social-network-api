@@ -31,12 +31,17 @@ module.exports = {
     createThought(req, res) {
         Thought.create(req.body)
             .then((thought) => {
-                User.findOneAndUpdate(
+                console.log(req.body.userId)
+                return User.findOneAndUpdate(
                     { _id: req.body.userId },
-                    { $push: { thoughts: ObjectId(thought._id)}},
-                    { runValidators: true, new: true }
+                    { $addToSet: { thoughts: thought._id }},
+                    { new: true }
                 )
-                res.json(thought)
+            })
+            .then((user) => {
+                !user
+                    ? res.status(404).json({message: 'Thought created, but no user by that ID exists'})
+                    : res.json("Thought successfully created")
             })
             .catch((err) => {
                 console.log(err);
@@ -74,7 +79,7 @@ module.exports = {
                 !thought
                     ? res.status(404).json({ message: "No message with that ID"})
                     : thought.reactions.push({
-                        reactionBody: req.body.reactionText,
+                        reactionBody: req.body.reactionBody,
                         username: req.body.username
                     });
                 thought.save();
