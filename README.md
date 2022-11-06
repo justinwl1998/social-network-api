@@ -18,7 +18,7 @@ A Node.js Express server that queries a MongoDB database for creating users, mak
 
 ## Preview
 
-[add preview video later]
+View the [demo video](https://drive.google.com/file/d/1_QTeENajZuFmYwCETO0WAJ70z_AWR6nH/view)
 
 ## Author
 
